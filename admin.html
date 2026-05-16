@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sécurité : empêcher l'indexation et l'embarquement dans des iframes -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="no-referrer">
+  <!-- CSP : restreindre les sources de contenu -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; frame-ancestors 'none';">
+  <title>Administration — Botaniva Bio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin-style.css">
+  <style>
+    /* Protège contre le flash de contenu non authentifié */
+    #admin-dashboard { display: none !important; }
+    .session-badge { font-size: 0.75rem; color: #1a7f37; background: #e8f5e9; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+    .login-attempts-bar { width: 100%; height: 3px; background: #eee; border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+    .login-attempts-fill { height: 100%; background: linear-gradient(90deg, #1a7f37, #ff6b6b); transition: width 0.3s; }
+  </style>
+</head>
+<body>
+
+  <!-- ====================== LOGIN PAGE ====================== -->
+  <div id="login-screen" class="login-page">
+    <div class="login-card">
+      <h1>BOTANIVA</h1>
+      <p style="margin-bottom: 2rem; color: #666;">Espace Administration</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="admin-email" placeholder="Votre email" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="admin-password" placeholder="Mot de passe" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn-login">Se connecter</button>
+      </form>
+      <p id="login-error" style="color: red; margin-top: 1rem; display: none;">Identifiants incorrects</p>
+    </div>
+  </div>
+
+  <!-- ====================== DASHBOARD ====================== -->
+  <div id="admin-dashboard" style="display: none; width: 100%;">
+    <aside class="admin-sidebar">
+      <div class="sidebar-logo">BOTANIVA BIO</div>
+      <ul class="sidebar-nav">
+        <li class="active" onclick="showSection('products')"><i class="fa-solid fa-box"></i> Produits</li>
+        <li onclick="showSection('content')"><i class="fa-solid fa-pen-to-square"></i> Contenu Site</li>
+        <li onclick="showSection('orders')"><i class="fa-solid fa-cart-shopping"></i> Commandes</li>
+        <li onclick="showSection('influencers')"><i class="fa-brands fa-youtube"></i> Vidéos</li>
+        <li onclick="logout()" style="margin-top: 2rem; color: #ff6b6b;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <h2 id="section-title">Gestion des Produits</h2>
+        <div class="admin-user">Bonjour, <strong>Gérante Botaniva</strong></div>
+      </header>
+
+      <!-- Section: Products -->
+      <section id="section-products" class="admin-section active">
+        <div class="card-table">
+          <div class="table-header">
+            <h3>Liste des produits</h3>
+            <button class="btn-add" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Nouveau Produit</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Nom</th>
+                <th>Prix (MAD)</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="product-list-body">
+              <!-- JS will populate -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Content -->
+      <section id="section-content" class="admin-section">
+        <div class="card-table">
+          <h3>Modifier le contenu du site</h3>
+          <form id="content-form" style="margin-top: 1.5rem;">
+            <div class="form-group">
+              <label>Titre Principal (Hero)</label>
+              <input type="text" id="edit-hero-title" style="width:100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #ddd;">
+            </div>
+            <div class="form-group">
+              <label>Texte "À Propos"</label>
+              <textarea id="edit-about-text" style="width:100%; height: 150px; padding: 1rem; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+            </div>
+            <button type="submit" class="btn-login">Mettre à jour le site</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Section: Orders -->
+      <section id="section-orders" class="admin-section">
+        <div class="card-table">
+          <div class="table-header">
+            <h3>Commandes Récentes</h3>
+            <button class="btn-add" style="background:#27ae60;" onclick="openPickupModal()"><i class="fa-solid fa-truck-pickup"></i> Demander Ramassage</button>
+          </div>
+          <p style="color: #666; margin-top: 1rem;">Les commandes s'afficheront ici au fur et à mesure.</p>
+          <table style="margin-top: 1rem;">
+            <thead>
+              <tr>
+                <th>Date / ID</th>
+                <th>Client / Tel</th>
+                <th>Ville / Adresse</th>
+                <th>Produits</th>
+                <th>Total</th>
+                <th>Tracking</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-list-body">
+              <!-- JS will populate -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Vidéos -->
+      <section id="section-influencers" class="admin-section">
+        <div class="card-table">
+          <h3>Gérer les vidéos des influenceuses</h3>
+          <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">
+            <strong>Conseil :</strong> Pour un chargement rapide, placez vos vidéos dans le dossier <code>assets/videos/</code> et entrez le nom du fichier (ex: <code>assets/videos/pub1.mp4</code>). 
+            Vous pouvez aussi utiliser des liens directs HTTPS.
+          </p>
+          <form id="influencers-form" style="margin-top: 1.5rem; display:flex; flex-direction:column; gap:1.5rem;">
+            <!-- Vidéo 1 -->
+            <div style="background:#f9f9f9; padding:1rem; border-radius:8px; border:1px solid #ddd;">
+              <h4 style="margin-bottom:1rem; color:#611226;">Vidéo 1</h4>
+               <div class="form-group">
+                 <label></label>
+                 <input type="text" id="inf-url-1" placeholder="assets\WhatsApp Video 2026-04-22 at 10.55.04.mp4" required>
+               </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group">
+                  <label></label>
+                  <input type="text" id="inf-title-1" placeholder="" required>
+                </div>
+                <div class="form-group">
+                  <label>label>
+                  <input type="text" id="inf-author-1" placeholder="" required>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Vidéo 2 -->
+            <div style="background:#f9f9f9; padding:1rem; border-radius:8px; border:1px solid #ddd;">
+              <h4 style="margin-bottom:1rem; color:#611226;">Vidéo 2</h4>
+                <div class="form-group">
+                  <label></label>
+                  <input type="text" id="inf-url-2" placeholder="Ex: assets/videos/promo2.mp4" required>
+                </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group">
+                  <label></label>
+                  <input type="text" id="inf-title-2" placeholder="" required>
+                </div>
+                <div class="form-group">
+                  <label></label>
+                  <input type="text" id="inf-author-2" placeholder="" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vidéo 3 -->
+            <div style="background:#f9f9f9; padding:1rem; border-radius:8px; border:1px solid #ddd;">
+              <h4 style="margin-bottom:1rem; color:#611226;">Vidéo 3</h4>
+               <div class="form-group">
+                 <label></label>
+                 <input type="text" id="inf-url-3" placeholder="Ex: assets/videos/influenceuse3.mp4" required>
+               </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group">
+                  <label></label>
+                  <input type="text" id="inf-title-3" placeholder="" required>
+                </div>
+                <div class="form-group">
+                  <label></label>
+                  <input type="text" id="inf-author-3" placeholder="" required>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-login">Sauvegarder les vidéos</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Product Edit/Add -->
+  <div id="product-modal" class="modal-overlay">
+    <div class="modal-content">
+      <h2 id="modal-title">Ajouter un Produit</h2>
+      <form id="product-form" style="margin-top: 1.5rem;">
+        <input type="hidden" id="edit-id">
+        <div class="form-group">
+          <label>Nom du produit</label>
+          <input type="text" id="p-name" required>
+        </div>
+        <div class="form-group">
+          <label>Prix (MAD)</label>
+          <input type="number" id="p-price" required>
+        </div>
+        <div class="form-group">
+          <label>URL Image</label>
+          <input type="text" id="p-img" placeholder="Ex: assets/products/savon.png" required>
+        </div>
+        <div class="form-group">
+          <label>URL Vidéo (Optionnel)</label>
+          <input type="text" id="p-video" placeholder="">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="p-desc" style="width:100%; min-height: 80px; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <button type="button" class="btn-login" style="background:#666;" onclick="closeProductModal()">Annuler</button>
+          <button type="submit" class="btn-login">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Complaint -->
+  <div id="complaint-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+      <h2>Déposer une Réclamation</h2>
+      <p id="complaint-tracking-display" style="margin-top: 0.5rem; font-weight: 600; color: #611226;"></p>
+      <form id="complaint-form" style="margin-top: 1.5rem;">
+        <input type="hidden" id="complaint-tracking">
+        <div class="form-group">
+          <label>Type de réclamation</label>
+          <select id="complaint-type" required style="width:100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+            <option value="">Chargement...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Note / Motif</label>
+          <textarea id="complaint-note" placeholder="Précisez votre demande..." style="width:100%; min-height: 100px; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;" required></textarea>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button type="button" class="btn-login" style="background:#666;" onclick="closeComplaintModal()">Annuler</button>
+          <button type="submit" class="btn-login">Envoyer la réclamation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Module de sécurité chargé EN PREMIER -->
+  <script src="security.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    // Protection supplémentaire : masquer la page si non authentifié pendant le chargement
+    document.addEventListener('DOMContentLoaded', () => {
+      // Désactiver le clic droit (anti-inspection basique)
+      document.addEventListener('contextmenu', e => e.preventDefault());
+      // Timeout de sécurité : si l'auth ne se résout pas en 5s, rediriger
+      setTimeout(() => {
+        const dash = document.getElementById('admin-dashboard');
+        const login = document.getElementById('login-screen');
+        if (dash && login && login.style.display !== 'none' && dash.style.display === 'none') {
+          // OK, la page de login est affichée normalement
+        }
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

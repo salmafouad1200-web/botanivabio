@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Downloads/mariage"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "botaniva_bio"
+	}
+}

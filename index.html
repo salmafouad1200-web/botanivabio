@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== SÉCURITÉ ===== -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+  <!-- ===== SEO & OPEN GRAPH ===== -->
+  <title>Botaniva Bio — Rituels de Beauté Naturels au Maroc</title>
+  <meta name="description" content="Botaniva Bio : cosmétique naturelle marocaine d'exception. Savon beldi, Tberma, Sérum White Perle, Crystal Musk. Livraison rapide partout au Maroc.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Botaniva Bio — Rituels de Beauté Naturels">
+  <meta property="og:description" content="Cosmétique naturelle marocaine d'exception. Savon beldi, Tberma, Sérum. Livraison au Maroc.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_MA">
+  <meta property="og:image" content="assetslogo_botaniva.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Botaniva Bio — Rituels de Beauté Naturels">
+  <meta name="theme-color" content="#611226">
+
+  <!-- ===== RESOURCE HINTS (Performance) ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.digylog.com">
+
+  <!-- ===== FONTS (priorité haute, display=swap) ===== -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- ===== ICONS (non-bloquant) ===== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+
+  <!-- ===== STYLES ===== -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assetslogo_botaniva.png">
+</head>
+
+<body>
+
+  <!-- ====================== TOP BAR ====================== -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <span><i class="fa-solid fa-truck-fast"></i> Livraison partout au Maroc</span>
+      <span><i class="fa-solid fa-credit-card"></i> Paiement à la livraison & Carte bancaire</span>
+      <span><i class="fa-solid fa-leaf"></i> 100% Naturel – Sans produits chimiques</span>
+    </div>
+  </div>
+
+  <!-- ====================== OVERLAY ====================== -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ====================== MOBILE NAV ====================== -->
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <button class="mobile-nav-close" id="mobile-close" aria-label="Fermer le menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <a href="#hero" onclick="closeMobileMenu()">Accueil</a>
+    <a href="#products" onclick="closeMobileMenu()">Produits</a>
+    <a href="#ritual" onclick="closeMobileMenu()">Rituel Hammam</a>
+    <a href="#offers" onclick="closeMobileMenu()">Offres</a>
+    <a href="#influencers" onclick="closeMobileMenu()">Vidéos</a>
+    <a href="#about" onclick="closeMobileMenu()">À propos</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  </nav>
+
+  <!-- ====================== NAVIGATION ====================== -->
+  <header id="site-nav" role="banner">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assetslogo_botaniva.png" alt="Botaniva Bio Logo" class="logo-img">
+      </a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="#hero" class="nav-link">Accueil</a>
+        <a href="#products" class="nav-link">Produits</a>
+        <a href="#ritual" class="nav-link">Rituel Hammam</a>
+        <a href="#offers" class="nav-link">Offres</a>
+        <a href="#influencers" class="nav-link">Vidéos</a>
+        <a href="#about" class="nav-link">À propos</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-icons">
+        <div class="search-wrap">
+          <input type="text" id="search-input" placeholder="Rechercher...">
+          <button class="nav-icon-btn" id="search-btn" aria-label="Rechercher"><i
+              class="fa-solid fa-magnifying-glass"></i></button>
+          <div id="search-results-dropdown" class="search-dropdown"></div>
+        </div>
+        <a href="admin.html" class="nav-icon-btn" aria-label="Compte"><i class="fa-regular fa-user"></i></a>
+        <button class="nav-icon-btn cart-btn" id="cart-btn" aria-label="Panier">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+        <button class="nav-hamburger" id="hamburger-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================== HERO ====================== -->
+  <section class="hero" id="hero" aria-label="Accueil Botaniva Bio">
+    <div class="hero-video-wrapper">
+      <video class="hero-video" autoplay muted playsinline preload="auto" fetchpriority="high">
+        <source src="assets/videos/hero_video.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <h1 class="hero-title">
+          Rituel de Beauté<br>
+          Naturel & <em>Élégant</em>
+        </h1>
+        <p class="hero-sub">
+          Découvrez le secret d'une peau pure, éclatante
+          et naturellement belle, inspiré du hammam marocain.
+        </p>
+        <div class="hero-cta-wrap">
+          <a href="#products" class="btn-primary">Voir les produits</a>
+          <a href="#ritual" class="btn-outline">Découvrir le rituel</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-badge-circle">
+          <div class="hero-badge-label">100%<br>Naturel</div>
+          <div class="hero-badge-sub">SANS PRODUITS CHIMIQUES</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== BRAND PRESENTATION (À PROPOS) ====================== -->
+  <section class="about-section" id="about">
+    <div class="wrap">
+      <div class="about-block reveal">
+        <h2 class="section-title-center">À propos de Botaniva</h2>
+        <div class="about-text">
+          <p>
+            Botaniva est une marque dédiée à la beauté de la peau à travers une approche naturelle et thérapeutique, où
+            la puissance des plantes rencontre l’expertise des soins cutanés profonds. Nous croyons que la vraie beauté
+            naît de l’équilibre. C’est pourquoi nos produits sont formulés à partir d’ingrédients naturels soigneusement
+            sélectionnés pour offrir à la peau nutrition, purification et protection.
+
+            Botaniva propose une gamme complète de soins adaptée à tous les types de peau et à leurs besoins
+            spécifiques. Cependant, la collection Hammam Marocain reste le cœur de nos rituels de beauté. Inspirée des
+            secrets du patrimoine marocain ancestral, cette gamme transforme le soin de la peau en une expérience
+            sensorielle complète, alliant nettoyage en profondeur, exfoliation naturelle et hydratation intense — pour
+            une peau douce, pure et éclatante, en toute sécurité.
+
+            Avec Botaniva, le soin de la peau n’est pas un simple geste… c’est un moment quotidien de bien-être qui
+            révèle la vitalité naturelle de votre peau ✨
+          </p>
+        </div>
+        <div class="about-pillars">
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fa-solid fa-seedling"></i></div>
+            <h4>Naturel</h4>
+            <p>Ingrédients purs et bienfaisants</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fa-solid fa-spa"></i></div>
+            <h4>Tradition</h4>
+            <p>Secrets du hammam marocain</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fa-solid fa-sun"></i></div>
+            <h4>Éclat</h4>
+            <p>Une peau saine et rayonnante</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== PRODUCTS ====================== -->
+  <section class="products-section" id="products" aria-label="Nos Produits">
+    <div class="wrap">
+      <div class="products-header reveal">
+        <h2 class="section-title-center">Nos Produits</h2>
+        <p class="section-sub">Des soins naturels pour chaque besoin de votre peau</p>
+      </div>
+
+      <!-- MENU CATÉGORIES -->
+      <div class="category-nav reveal" aria-label="Menu des catégories">
+        <button class="cat-btn active" data-category="all">PRODUITS</button>
+        <button class="cat-btn" data-category="Corps">CORPS</button>
+        <button class="cat-btn" data-category="Cheveux">CHEVEUX</button>
+        <button class="cat-btn" data-category="Pieds">PIEDS</button>
+        <button class="cat-btn" data-category="Huiles Parfumées">HUILES PARFUMÉES</button>
+        <button class="cat-btn" data-category="Packs">NOS PACKS</button>
+      </div>
+
+      <div class="product-grid" id="main-product-grid">
+        <!-- Les produits seront générés dynamiquement par JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== RITUAL ====================== -->
+  <section class="ritual-section" id="ritual" aria-label="Rituel Hammam">
+    <div class="wrap">
+      <div class="ritual-header reveal">
+        <h2 class="section-title-center">Rituel Hammam Marocain</h2>
+        <p class="section-sub">Inspiré des traditions marocaines, ce rituel nettoie, exfolie et hydrate votre peau en
+          profondeur.</p>
+      </div>
+      <div class="ritual-steps reveal">
+        <div class="ritual-steps-left">
+          <div class="ritual-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Nettoyer</h4>
+              <p class="step-desc">Purifie et élimine les impuretés avec le Savon Noir</p>
+            </div>
+          </div>
+          <div class="ritual-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Exfolier</h4>
+              <p class="step-desc">Élimine les cellules mortes en douceur avec la Tberma</p>
+            </div>
+          </div>
+          <div class="ritual-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Nourrir</h4>
+              <p class="step-desc">Unifie and hydrate intensément avec le Sérum</p>
+            </div>
+          </div>
+          <div class="ritual-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Parfumer</h4>
+              <p class="step-desc">Laisse une sensation de fraîcheur avec le Musc</p>
+            </div>
+          </div>
+        </div>
+        <div class="ritual-image-wrap">
+          <img src="hero_clean.jpg" alt="Produits Ritual Hammam" loading="lazy" width="600" height="400">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== OFFERS SECTION ====================== -->
+  <section class="offers-section" id="offers">
+    <div class="wrap">
+      <div class="offers-block reveal">
+        <div class="offers-label"><i class="fa-solid fa-gift"></i> Nos Offres</div>
+        <h3 class="offers-title">Coffret Hammam Marocain</h3>
+        <p class="offers-desc">Le rituel complet pour une peau douce, pure et éclatante.</p>
+        <div class="offers-img-wrap">
+          <img src="paque biotaniva.jpeg" alt="Coffret Hammam Marocain" loading="lazy" width="600" height="400">
+          <span class="offers-discount">-24%</span>
+        </div>
+        <div class="offers-pricing">
+          <span class="offers-old-price">460 MAD</span>
+          <span class="offers-new-price">350 MAD</span>
+        </div>
+        <a href="#offers" class="btn-offers add-to-cart" data-id="99" data-name="Coffret Hammam Marocain"
+          data-price="350" data-img="paque biotaniva.jpeg">
+          RESERVER MON COFFRET
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== INFLUENCER VIDEOS ====================== -->
+  <section class="influencers-section" id="influencers" aria-label="Vidéos de nos ambassadrices">
+    <div class="wrap">
+      <div class="influencers-header reveal">
+        <h2 class="section-title-center">Elles ont testé Botaniva</h2>
+      </div>
+      <div class="influencers-grid" id="influencers-grid">
+        <!-- Les vidéos seront générées dynamiquement par script.js -->
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews-section" id="reviews" aria-label="">
+    <div class="wrap">
+      <h2 class="section-title-center reveal">Avis Clients en Vidéo</h2>
+      <p class="section-sub reveal" style="text-align: center; margin-bottom: 2rem;">Découvrez les retours authentiques
+        de nos clientes</p>
+      <div class="reviews-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+
+        <div class="review-video-card reveal">
+          <video src="assets/videos/sats1.mp4" controls preload="none"
+            style="width: 100%; border-radius: 12px; aspect-ratio: 9/16; object-fit: cover; background: #000;"></video>
+        </div>
+
+        <div class="review-video-card reveal">
+          <video src="assets/videos/sats2.mp4" controls preload="none"
+            style="width: 100%; border-radius: 12px; aspect-ratio: 9/16; object-fit: cover; background: #000;"></video>
+        </div>
+
+        <div class="review-video-card reveal">
+          <video src="assets/videos/sats3.mp4" controls preload="none"
+            style="width: 100%; border-radius: 12px; aspect-ratio: 9/16; object-fit: cover; background: #000;"></video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== CONTACT INFO ====================== -->
+  <section class="contact-section" id="contact">
+    <div class="wrap">
+      <div class="contact-grid">
+
+        <div class="contact-block reveal">
+          <h3>Contactez-nous</h3>
+          <ul class="contact-list">
+            <li><i class="fa-brands fa-whatsapp"></i> <strong>WhatsApp</strong><br>+212 6 53 25 24 05</li>
+            <li><i class="fa-brands fa-instagram"></i> <strong>Instagram</strong><br><a
+                href="https://www.instagram.com/botaniva_bio?utm_source=qr" target="_blank"
+                rel="noopener noreferrer">@botaniva_bio</a></li>
+            <li><i class="fa-brands fa-facebook"></i> <strong>Facebook</strong><br><a
+                href="https://www.facebook.com/share/17MAyHopkL/?mibextid=wwXIfr" target="_blank"
+                rel="noopener noreferrer">Botaniva Bio</a></li>
+            <li><i class="fa-solid fa-envelope"></i> <strong>Email</strong><br><a
+                href="mailto:Botaniva21@gmail.com">Botaniva21@gmail.com</a></li>
+            <li><i class="fa-solid fa-truck-fast"></i> <strong>Livraison</strong><br>Partout au Maroc – 24/48h</li>
+          </ul>
+          <a href="https://wa.me/212653252405" target="_blank" rel="noopener noreferrer" class="btn-contact">
+            <i class="fa-brands fa-whatsapp"></i> Nous écrire
+          </a>
+        </div>
+
+        <div class="contact-block reveal">
+          <h3>Pourquoi choisir Botaniva ?</h3>
+          <ul class="why-list">
+            <li><i class="fa-solid fa-check"></i> 100% Naturel</li>
+            <li><i class="fa-solid fa-check"></i> Inspiré du patrimoine marocain</li>
+            <li><i class="fa-solid fa-check"></i> Convient à tous les types de peau</li>
+            <li><i class="fa-solid fa-check"></i> Sans parabènes, sans sulfates</li>
+            <li><i class="fa-solid fa-check"></i> Respectueux de l'environnement</li>
+          </ul>
+        </div>
+
+        <div class="contact-block reveal">
+          <h3>Restez inspirée</h3>
+          <p class="newsletter-text">Recevez nos conseils beauté, nos offres exclusives et nos nouveautés.</p>
+          <form class="newsletter-form" id="newsletter-form" onsubmit="handleNewsletter(event)">
+            <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Votre email"
+              autocomplete="email" required maxlength="100">
+            <button type="submit">S'inscrire</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== FOOTER ====================== -->
+  <footer id="footer" aria-label="Pied de page Botaniva Bio">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <p class="footer-logo">Botaniva Bio</p>
+          <p class="footer-tagline">La beauté naturelle, un rituel quotidien 🌿</p>
+        </div>
+        <div class="footer-col">
+          <h5>Liens rapides</h5>
+          <ul>
+            <li><a href="#hero">Accueil</a></li>
+            <li><a href="#products">Produits</a></li>
+            <li><a href="#ritual">Rituel Hammam</a></li>
+            <li><a href="#offers">Offres</a></li>
+            <li><a href="#about">À propos</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Informations</h5>
+          <ul>
+            <li><a href="#">Livraison & Retours</a></li>
+            <li><a href="#">Paiement à la livraison</a></li>
+            <li><a href="#">Conditions générales</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Suivez-nous</h5>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/botaniva_bio?utm_source=qr" target="_blank" rel="noopener noreferrer"
+              aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/share/17MAyHopkL/?mibextid=wwXIfr" target="_blank"
+              rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://wa.me/212653252405" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i
+                class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://www.tiktok.com/@botaniva21?_r=1&_t=ZS-95YlqhA0OzY" target="_blank"
+              rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Botaniva Bio – Tous droits réservés.</span>
+        <!-- Lien admin discret — intentionnellement non visible -->
+        <span id="admin-footer-link" style="opacity:0;user-select:none;font-size:0.1rem;" aria-hidden="true"> </span>
+        <span>Fait avec <i class="fa-solid fa-heart" style="color:var(--c-bordeaux)"></i> au Maroc</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================== CART SIDEBAR ====================== -->
+  <aside class="cart-sidebar" id="cart-sidebar" aria-label="Votre panier">
+    <div class="cart-top">
+      <h3>Votre Panier</h3>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Fermer le panier">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items-wrap" id="cart-items-wrap">
+      <p class="cart-empty-msg">Votre panier est vide</p>
+    </div>
+    <div class="cart-bottom">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total">0 MAD</span>
+      </div>
+      <button class="btn-checkout" id="checkout-open-btn">
+        <i class="fa-solid fa-lock"></i> Passer la commande
+      </button>
+      <p class="cart-delivery-note"><i class="fa-solid fa-truck-fast"></i> Livraison rapide · Paiement à la livraison
+        disponible</p>
+    </div>
+  </aside>
+
+  <!-- ====================== CHECKOUT MODAL ====================== -->
+  <div class="modal-wrap" id="modal-wrap" role="dialog" aria-modal="true" aria-label="Formulaire de commande">
+    <div class="modal-box" id="modal-box">
+      <!-- Steps Indicator -->
+      <div class="checkout-steps">
+        <div class="step active" data-step="1">1<span>Panier</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">2<span>Infos</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">3<span>Vérification</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="4">4<span>Succès</span></div>
+      </div>
+
+      <div id="checkout-step-1" class="modal-step-content active">
+        <h2 class="modal-title">Récapitulatif & Livraison</h2>
+        <div id="modal-order-items" class="modal-order-items">
+          <!-- JS will populate -->
+        </div>
+
+        <p class="pay-label">Option de livraison</p>
+        <div class="delivery-options">
+          <label class="del-opt selected">
+            <input type="radio" name="delivery" value="standard" checked onchange="updateDelivery(30, 'Standard')">
+            <div class="del-info">
+              <strong>Livraison Standard (2-3 jours)</strong>
+              <span>30 MAD</span>
+            </div>
+          </label>
+          <label class="del-opt">
+            <input type="radio" name="delivery" value="express" onchange="updateDelivery(50, 'Express')">
+            <div class="del-info">
+              <strong>Livraison Express (24h)</strong>
+              <span>50 MAD</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="modal-total-bar">
+          <div class="total-row"><span>Sous-total:</span> <span id="modal-subtotal">0 MAD</span></div>
+          <div class="total-row"><span>Livraison:</span> <span id="modal-delivery-fee">30 MAD</span></div>
+          <div class="total-row main-total"><span>Total à payer:</span> <strong id="modal-total-price">0 MAD</strong>
+          </div>
+        </div>
+        <button class="btn-checkout" onclick="goToStep(2)">
+          Continuer vers vos coordonnées <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div id="checkout-step-2" class="modal-step-content">
+        <h2 class="modal-title">Vos Informations</h2>
+        <p class="modal-sub">Renseignez vos coordonnées pour l'expédition</p>
+
+        <form id="checkout-form" novalidate>
+          <div class="form-group">
+            <label for="name">Nom complet</label>
+            <input type="text" id="name" name="name" placeholder="Prénom et nom" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Téléphone WhatsApp</label>
+            <input type="tel" id="phone" name="phone" placeholder="06 / 07 XXXXXXXX" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="position: relative;">
+              <label for="city">Ville</label>
+              <input type="text" id="city-search" name="city" list="city-list" placeholder="Tapez pour rechercher votre ville..." required autocomplete="off" style="width:100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+              <datalist id="city-list">
+                <!-- Dynamically populated -->
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label for="address">Quartier / Adresse</label>
+              <input type="text" id="address" name="address" placeholder="Ex: Hay Salam, Rue 4, N°12" required>
+            </div>
+          </div>
+
+          <p class="pay-label">Mode de paiement</p>
+          <div class="payment-grid">
+            <div class="pay-opt selected" data-pay="cod">
+              <i class="fa-solid fa-truck"></i>
+              <span>Cash à la livraison</span>
+            </div>
+            <div class="pay-opt" data-pay="card">
+              <i class="fa-solid fa-credit-card"></i>
+              <span>Carte Bancaire</span>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <button type="button" class="btn-back" onclick="goToStep(1)">Retour</button>
+            <button type="submit" class="btn-checkout flex-1">
+              Continuer vers la vérification <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="checkout-step-3" class="modal-step-content">
+        <h2 class="modal-title">Vérifiez vos données</h2>
+        <div id="review-summary" class="review-summary" style="background:#f9f9f9; padding:1.5rem; border-radius:12px; margin-bottom:1.5rem; border:1px solid #eee;">
+          <!-- JS will populate -->
+        </div>
+        <div class="form-nav">
+          <button type="button" class="btn-back" onclick="goToStep(2)">Modifier les infos</button>
+          <button type="button" class="btn-checkout flex-1" id="final-confirm-btn" onclick="submitFinalOrder()">
+            <i class="fa-solid fa-check-circle"></i> Valider et Envoyer
+          </button>
+        </div>
+      </div>
+
+      <div id="checkout-step-4" class="modal-step-content" style="text-align:center;">
+        <!-- Success message -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== PRODUCT DETAIL MODAL ====================== -->
+  <div id="product-detail-modal" class="modal-wrap" aria-label="Détails du produit">
+    <div class="modal-card detail-card">
+      <button class="modal-close" id="detail-close-btn">&times;</button>
+      <div class="detail-grid">
+        <div class="detail-img-side">
+          <div id="detail-img-wrap" class="detail-img-container">
+            <!-- Image or Video -->
+          </div>
+        </div>
+        <div class="detail-info-side">
+          <h2 id="detail-name" class="detail-title"></h2>
+          <p id="detail-desc" class="detail-description"></p>
+
+          <div class="detail-pricing-section">
+            <p id="detail-price" class="detail-price-main"></p>
+            <div id="detail-variants-wrap"></div>
+            <div id="detail-parfums-wrap"></div>
+          </div>
+
+          <div class="detail-actions">
+            <button id="detail-add-btn" class="btn-checkout">
+              <i class="fa-solid fa-cart-shopping"></i> AJOUTER AU PANIER
+            </button>
+            <button type="button" class="btn-back-modal" onclick="closeDetailModal()">
+              RETOUR
+            </button>
+          </div>
+
+          <div class="detail-trust">
+            <span><i class="fa-solid fa-check"></i> 100% Naturel</span>
+            <span><i class="fa-solid fa-truck"></i> Livraison Rapide</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module sécurité chargé EN PREMIER -->
+  <script src="security.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+
+</html>
