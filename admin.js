@@ -170,9 +170,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const raw = Sec.safeGetStorage('botaniva_catalog');
     if (Array.isArray(raw)) return raw.map(Sec.sanitizeProductData);
     return [
-      { id: 1, name: 'LUX BELDI SOAP', price: 129, desc: "Savon Noir d'exception infusé au Flio", img: 'soap.png', video: '' },
-      { id: 2, name: 'MOROCCAN SECRET', price: 139, desc: 'Tberma ancestrale aux plantes rares', img: 'tberma.png', video: '' },
-      { id: 3, name: 'SÉRUM WHITE PERLE', price: 189, desc: "L'élixir anti-taches ultime.", img: 'White Perle Sérum .jpeg', video: '' }
+      { id: 1, name: 'LUX BELDI SOAP', price: 129, desc: "Savon Noir d'exception infusé au Flio", img: './assets/products/soap.png', video: '' },
+      { id: 2, name: 'MOROCCAN SECRET', price: 139, desc: 'Tberma ancestrale aux plantes rares', img: './assets/products/tberma.png', video: '' },
+      { id: 3, name: 'SÉRUM WHITE PERLE', price: 189, desc: "L'élixir anti-taches ultime.", img: './assets/products/white_perle_serum.jpeg', video: '' }
     ];
   })();
 
@@ -513,9 +513,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   function loadInfluencersVideos() {
     const defaultVideos = [
       { url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Tutoriel : Rituel Hammam complet', author: 'Par @InfluenceuseBeauté' },
-      { url: 'assets/hero_premium_hd.png', title: 'Mon avis sur le Savon Beldi', author: 'Par @BeautyBySara' },
-      { url: 'WhatsApp Video 2026-04-22 at 10.55.04 (1).mp4', title: 'Routine éclat au Sérum Perle', author: 'Par @MoroccanGlow' },
-      { url: 'WhatsApp Video 2026-04-22 at 10.54.09.mp4', title: 'Fraîcheur du Musc', author: 'Par @MarocBeauté' }
+      { url: './assets/hero_premium_hd.png', title: 'Mon avis sur le Savon Beldi', author: 'Par @BeautyBySara' },
+      { url: './assets/videos/WhatsApp Video 2026-04-22 at 10.55.04.mp4', title: 'Routine éclat au Sérum Perle', author: 'Par @MoroccanGlow' },
+      { url: './assets/WhatsApp Video 2026-04-22 at 10.54.09.mp4', title: 'Fraîcheur du Musc', author: 'Par @MarocBeauté' }
     ];
     let videos = Sec.safeGetStorage('botaniva_influencers');
     if (!videos || !Array.isArray(videos) || videos.length === 0) {

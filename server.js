@@ -9,7 +9,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // ---------- Security & Performance Middleware ----------
 
@@ -43,10 +43,10 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*') || origin.includes('railway.app')) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(null, true);
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -78,17 +78,7 @@ app.use((req, res, next) => {
 
 // ---------- Static Files & Caching ----------
 
-// Cache assets for 1 day in production
-const cacheTime = 86400000; 
-
-app.use(express.static(path.join(__dirname), {
-  maxAge: cacheTime,
-  setHeaders: (res, path) => {
-    if (path.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache'); // HTML always fresh
-    }
-  }
-}));
+app.use(express.static(__dirname));
 
 // ---------- Digylog Configuration ----------
 
@@ -289,6 +279,10 @@ app.post('/labels', async (req, res) => {
     });
     response.body.pipe(res);
   } catch (e) { res.status(500).send('Error'); }
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
