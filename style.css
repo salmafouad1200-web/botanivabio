@@ -585,6 +585,7 @@ button { cursor: pointer; font-family: var(--f-body); border: none; background: 
     padding-bottom: 1rem;
     justify-content: flex-start;
     overflow-x: auto;
+    flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* Firefox */
   }
@@ -1744,7 +1745,7 @@ footer {
   .hero-cta-wrap { justify-content: center; }
   .hero-right { display: none; }
 
-  .product-grid { grid-template-columns: 1fr; max-width: 400px; margin-inline: auto; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 100%; }
   .about-pillars { grid-template-columns: 1fr; gap: 1.5rem; }
   .ritual-steps { flex-direction: column; align-items: center; gap: 1.5rem; }
   .step-arrow { transform: rotate(90deg); }
@@ -1760,4 +1761,5 @@ footer {
   .hero-title { font-size: 1.8rem; }
   .btn-primary, .btn-outline { width: 100%; text-align: center; }
   .payment-options { grid-template-columns: 1fr; }
+  .product-grid { grid-template-columns: 1fr; max-width: 320px; margin-inline: auto; gap: 2rem; }
 }

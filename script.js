@@ -103,7 +103,22 @@ let defaultCatalog = [
   { id: 20, name: 'Pink Tush', category: 'Pieds', price: 130, oldPrice: 170, desc: "Crème rose réparatrice et embellissante pour hydrater et revitaliser les pieds secs.", img: './assets/products/pink touch.jpeg', supplier: 'Digylog', productCode: 'FOOT-002', supplierName: 'mamahbiba', variants: [{ label: '1 pièce', price: 130 }] }
 ];
 let products = defaultCatalog;
-if (Sec) Sec.safeSetStorage('botaniva_catalog', products);
+
+async function loadProducts() {
+  try {
+    const res = await fetch(`${API_BASE}/api/products`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      products = data;
+      if (Sec) Sec.safeSetStorage('botaniva_catalog', products);
+    }
+  } catch (e) {
+    console.warn('Utilisation du catalogue par défaut (API inaccessible).', e);
+  }
+  renderCatalog();
+}
+loadProducts();
 
 const siteContent = Sec ? Sec.safeGetStorage('botaniva_content') : null;
 if (siteContent) {
@@ -723,7 +738,30 @@ const renderInfluencers = () => {
   }).join('');
 };
 
-renderCatalog();
-renderCart();
-renderInfluencers();
+  // --- MOBILE NAV CONTROLLER ---
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileNav = document.getElementById('mobile-nav');
+  const mobileClose = document.getElementById('mobile-close');
+
+  const openMobileMenu = () => {
+    mobileNav?.classList.add('active');
+    overlay?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeMobileMenu = () => {
+    mobileNav?.classList.remove('active');
+    if (!cartSidebar.classList.contains('active') && !detailModal.classList.contains('active')) {
+      overlay?.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  };
+
+  hamburgerBtn?.addEventListener('click', openMobileMenu);
+  mobileClose?.addEventListener('click', closeMobileMenu);
+  window.closeMobileMenu = closeMobileMenu;
+
+  renderCatalog();
+  renderCart();
+  renderInfluencers();
 });

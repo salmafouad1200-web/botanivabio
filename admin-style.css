@@ -27,7 +27,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(rgba(97, 18, 38, 0.8), rgba(61, 11, 24, 0.9)), url('hero.png');
+  background: linear-gradient(rgba(97, 18, 38, 0.8), rgba(61, 11, 24, 0.9)), url('./assets/images/hero.png');
   background-size: cover;
   background-position: center;
   position: relative;
@@ -101,6 +101,12 @@ body {
 }
 
 /* --- Dashboard Layout --- */
+#admin-dashboard {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
 .admin-sidebar {
   width: 260px;
   background: var(--c-admin-sidebar);
@@ -203,6 +209,7 @@ body {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow-x: auto;
 }
 
 .table-header {
@@ -316,3 +323,62 @@ td {
 .status-select.status-paid { background: #e3f9e5; color: #1a7f37; }
 .status-select.status-pending { background: #fff4e5; color: #b76e00; }
 .status-select.status-confirmed { background: #e5f1ff; color: #0056b3; }
+
+/* --- RESPONSIVE DASHBOARD --- */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+  #admin-dashboard {
+    flex-direction: column;
+  }
+  .card-table {
+    overflow-x: auto;
+  }
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 1.5rem 1rem;
+    align-items: center;
+  }
+  .sidebar-logo {
+    margin-bottom: 1.5rem;
+  }
+  .sidebar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .sidebar-nav li {
+    padding: 0.6rem 1rem;
+    margin-bottom: 0;
+    font-size: 0.9rem;
+  }
+  .sidebar-nav li[onclick="logout()"] {
+    margin-top: 0 !important;
+  }
+  .admin-main {
+    padding: 1rem;
+  }
+  .admin-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    align-items: center;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .table-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  .btn-add {
+    width: 100%;
+    text-align: center;
+  }
+}
+

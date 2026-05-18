@@ -158,23 +158,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // ── INITIALISATION DU DASHBOARD ───────────────────────────────────────
-  function initDashboard() {
-    renderProducts();
+  async function initDashboard() {
+    await loadProducts();
     renderOrders();
     loadSiteContent();
     loadInfluencersVideos();
   }
 
-  // ── GESTION DES PRODUITS (CRUD + SÉCURISÉ) ───────────────────────────
-  let products = (() => {
-    const raw = Sec.safeGetStorage('botaniva_catalog');
-    if (Array.isArray(raw)) return raw.map(Sec.sanitizeProductData);
-    return [
-      { id: 1, name: 'LUX BELDI SOAP', price: 129, desc: "Savon Noir d'exception infusé au Flio", img: './assets/products/soap.png', video: '' },
-      { id: 2, name: 'MOROCCAN SECRET', price: 139, desc: 'Tberma ancestrale aux plantes rares', img: './assets/products/tberma.png', video: '' },
-      { id: 3, name: 'SÉRUM WHITE PERLE', price: 189, desc: "L'élixir anti-taches ultime.", img: './assets/products/white_perle_serum.jpeg', video: '' }
-    ];
-  })();
+  // ── GESTION DES PRODUITS (CRUD + SÉCURISÉ + BACKEND BACKED) ───────────
+  let products = [];
+
+  async function loadProducts() {
+    try {
+      const response = await fetch(`${API_BASE}/api/products`);
+      if (!response.ok) throw new Error(`Erreur serveur (HTTP ${response.status})`);
+      products = await response.json();
+    } catch (err) {
+      console.error('Erreur chargement produits:', err);
+      // Fallback local
+      const raw = Sec.safeGetStorage('botaniva_catalog');
+      if (Array.isArray(raw)) {
+        products = raw.map(Sec.sanitizeProductData);
+      } else {
+        products = [
+          { id: 1, name: 'LUX BELDI SOAP', price: 129, desc: "Savon Noir d'exception infusé au Flio", img: './assets/products/soap.png', video: '' },
+          { id: 2, name: 'MOROCCAN SECRET', price: 139, desc: 'Tberma ancestrale aux plantes rares', img: './assets/products/tberma.png', video: '' },
+          { id: 3, name: 'SÉRUM WHITE PERLE', price: 189, desc: "L'élixir anti-taches ultime.", img: './assets/products/white_perle_serum.jpeg', video: '' }
+        ];
+      }
+    }
+    renderProducts();
+  }
 
   function renderProducts() {
     const tbody = document.getElementById('product-list-body');
@@ -188,7 +202,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td><img src="${Sec.sanitizeUrl(p.img)}" class="product-img-mini" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22><rect fill=%22%23eee%22 width=%2250%22 height=%2250%22/></svg>'"></td>
         <td><strong>${p.name}</strong></td>
         <td>${p.price} MAD</td>
-        <td>${p.desc.substring(0, 40)}…</td>
+        <td>${p.desc ? p.desc.substring(0, 40) : ''}…</td>
         <td class="actions">
           <div class="btn-icon btn-edit"   onclick="editProduct(${Number(p.id)})"  ><i class="fa-solid fa-pen"></i></div>
           <div class="btn-icon btn-delete" onclick="deleteProduct(${Number(p.id)})"><i class="fa-solid fa-trash"></i></div>
@@ -207,10 +221,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   window.closeProductModal = () => { modal.style.display = 'none'; };
 
-  document.getElementById('product-form')?.addEventListener('submit', (e) => {
+  document.getElementById('product-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const rawId = document.getElementById('edit-id').value;
     const rawData = {
-      id: document.getElementById('edit-id').value,
+      id: rawId ? Number(rawId) : 0,
       name: document.getElementById('p-name').value,
       price: document.getElementById('p-price').value,
       img: document.getElementById('p-img').value,
@@ -223,16 +238,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!clean.name) { alert('Le nom du produit est requis.'); return; }
     if (clean.price <= 0) { alert('Le prix doit être supérieur à 0.'); return; }
 
-    if (rawData.id) {
-      const p = products.find(prod => prod.id == Number(rawData.id));
-      if (p) { Object.assign(p, clean); p.id = Number(rawData.id); }
-    } else {
-      const newId = products.length ? Math.max(...products.map(x => x.id)) + 1 : 1;
-      products.push({ ...clean, id: newId });
-    }
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enregistrement...';
 
-    renderProducts();
-    closeProductModal();
+    try {
+      let res;
+      if (rawId) {
+        res = await fetch(`${API_BASE}/api/products/${rawId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(clean)
+        });
+      } else {
+        // Obtenir un ID unique pour le nouveau produit
+        const nextId = products.length ? Math.max(...products.map(x => x.id)) + 1 : 1;
+        clean.id = nextId;
+        res = await fetch(`${API_BASE}/api/products`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(clean)
+        });
+      }
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      await loadProducts();
+      closeProductModal();
+    } catch (err) {
+      console.error('Erreur sauvegarde produit:', err);
+      // Fallback local
+      if (rawId) {
+        const p = products.find(prod => prod.id == Number(rawId));
+        if (p) { Object.assign(p, clean); p.id = Number(rawId); }
+      } else {
+        const nextId = products.length ? Math.max(...products.map(x => x.id)) + 1 : 1;
+        clean.id = nextId;
+        products.push(clean);
+      }
+      renderProducts();
+      closeProductModal();
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enregistrer';
+    }
   });
 
   window.editProduct = (id) => {
@@ -243,15 +291,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('p-price').value = p.price;
     document.getElementById('p-img').value = p.img;
     document.getElementById('p-video').value = p.video || '';
-    document.getElementById('p-desc').value = p.desc;
+    document.getElementById('p-desc').value = p.desc || '';
     document.getElementById('modal-title').textContent = 'Modifier le Produit';
     modal.style.display = 'flex';
   };
 
-  window.deleteProduct = (id) => {
+  window.deleteProduct = async (id) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-      products = products.filter(p => p.id !== Number(id));
-      renderProducts();
+      try {
+        const res = await fetch(`${API_BASE}/api/products/${id}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await loadProducts();
+      } catch (err) {
+        console.error('Erreur suppression produit:', err);
+        products = products.filter(p => p.id !== Number(id));
+        renderProducts();
+      }
     }
   };
 
@@ -267,11 +324,59 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const response = await fetch(`${API_BASE}/api/orders`);
       if (!response.ok) throw new Error(`Erreur serveur (HTTP ${response.status})`);
-      orders = await response.json();
+      const result = await response.json();
+      
+      let rawOrders = [];
+      if (Array.isArray(result)) {
+        rawOrders = result;
+      } else if (result && Array.isArray(result.orders)) {
+        rawOrders = result.orders;
+      }
+      
+      orders = rawOrders.map(o => {
+        let nStatus = o.status || 'En attente';
+        if (nStatus === 'pending') nStatus = 'En attente';
+        if (nStatus === 'confirmed') nStatus = 'Confirmée';
+        if (nStatus === 'delivered') nStatus = 'Livrée';
+        
+        return {
+          id: o.id || o.orderId || '',
+          date: o.date || (o.created_at ? new Date(o.created_at).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR')),
+          client: o.client || o.clientName || '',
+          phone: o.phone || '',
+          city: o.city || '',
+          address: o.address || '',
+          items: o.items || [],
+          total: o.total !== undefined ? o.total : (o.totalAmount !== undefined ? o.totalAmount : 0),
+          tracking: o.tracking || o.trackingNumber || '',
+          status: nStatus,
+          supplierNotes: o.supplierNotes || o.note || ''
+        };
+      });
     } catch (err) {
       console.error('Erreur chargement commandes:', err);
       // Fallback local pour ne pas bloquer
-      orders = Sec.safeGetStorage('botaniva_orders') || [];
+      const raw = Sec.safeGetStorage('botaniva_orders') || [];
+      orders = raw.map(o => {
+        let nStatus = o.status || 'En attente';
+        if (nStatus === 'pending') nStatus = 'En attente';
+        if (nStatus === 'confirmed') nStatus = 'Confirmée';
+        if (nStatus === 'delivered') nStatus = 'Livrée';
+        
+        return {
+          id: o.id || o.orderId || '',
+          date: o.date || (o.created_at ? new Date(o.created_at).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR')),
+          client: o.client || o.clientName || '',
+          phone: o.phone || '',
+          city: o.city || '',
+          address: o.address || '',
+          items: o.items || [],
+          total: o.total !== undefined ? o.total : (o.totalAmount !== undefined ? o.totalAmount : 0),
+          tracking: o.tracking || o.trackingNumber || '',
+          status: nStatus,
+          supplierNotes: o.supplierNotes || o.note || ''
+        };
+      });
     }
 
     if (orders.length === 0) {
@@ -513,9 +618,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   function loadInfluencersVideos() {
     const defaultVideos = [
       { url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Tutoriel : Rituel Hammam complet', author: 'Par @InfluenceuseBeauté' },
-      { url: './assets/hero_premium_hd.png', title: 'Mon avis sur le Savon Beldi', author: 'Par @BeautyBySara' },
+      { url: './assets/images/hero_premium_hd.png', title: 'Mon avis sur le Savon Beldi', author: 'Par @BeautyBySara' },
       { url: './assets/videos/WhatsApp Video 2026-04-22 at 10.55.04.mp4', title: 'Routine éclat au Sérum Perle', author: 'Par @MoroccanGlow' },
-      { url: './assets/WhatsApp Video 2026-04-22 at 10.54.09.mp4', title: 'Fraîcheur du Musc', author: 'Par @MarocBeauté' }
+      { url: './assets/videos/WhatsApp Video 2026-04-22 at 10.54.09.mp4', title: 'Fraîcheur du Musc', author: 'Par @MarocBeauté' }
     ];
     let videos = Sec.safeGetStorage('botaniva_influencers');
     if (!videos || !Array.isArray(videos) || videos.length === 0) {
